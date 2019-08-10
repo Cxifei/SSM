@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--配置自动扫描的包（自动注入）-->
+    <!--只使用一个注解，其他三种无效的配置-->
+    <!--<context:component-scan base-package="com.cxf.ssm_one.service">-->
+        <!--<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+        <!--<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>-->
+        <!--<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Component"/>-->
+    <!--</context:component-scan>-->
+
+    <context:component-scan base-package="com.cxf.ssm_one.service" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+
+    <!--事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--使用注解配置事务管理器-->
+    <!--手动添加其他名字需要些右边这个，和上面那个一样，默认可以不用写-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <aop:aspectj-autoproxy/>
+
+    <!--<aop:config proxy-target-class="true"/>-->
+
+
+    <!--分开写是便于后期切换框架，不导入这个也可以，最后spring编译文件会编译到一个空间里面不影响执行-->
+    <import resource="classpath:spring/spring-dao.xml"/>
+
+
+
+</beans>
